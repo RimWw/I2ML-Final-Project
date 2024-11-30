@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Flask Website</h1>
+    <img src="{{ url_for('static', filename='test.png') }}" alt="Logo" width="200">
+    <p>This is the home page.</p>
+    <a href="/about">Go to About Page</a>
+</body>
+</html>
