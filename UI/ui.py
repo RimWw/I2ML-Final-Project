@@ -26,10 +26,11 @@ def home():
         file = request.files['file']
         if file and allowed_file(file.filename):
             # Save the file
-            #filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            #file.save(filepath)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(filepath)
+            print(filepath)
             # Pass the file path to render_template to display the image
-            return render_template('index.html', uploaded_file="Screenshot.png")
+            return render_template('index.html', uploaded_file=filepath)
     
     # Render the page without an uploaded file
     return render_template('index.html', uploaded_file=None)
