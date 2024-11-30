@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Upload Picture</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Flask Website</h1>
-    <img src="{{ url_for('static', filename='test.png') }}" alt="Logo" width="200">
-    <p>This is the home page.</p>
-    <a href="/about">Go to About Page</a>
+    <h1>Upload a Picture</h1>
+    
+    <!-- File Upload Form -->
+    <form method="POST" action="/" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <!-- Display the Uploaded Image -->
+    {% if uploaded_file %}
+    <div>
+        <h2>Uploaded Image:</h2>
+        <img src="{{ url_for('static', filename=uploaded_file.split('static/')[1]) }}" alt="Uploaded Image">
+    </div>
+    {% endif %}
 </body>
 </html>
