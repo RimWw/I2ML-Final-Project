@@ -19,7 +19,9 @@
     {% if uploaded_file %}
     <div>
         <h2>Uploaded Image:</h2>
-        <img src="{{uploaded_file}}" alt="Uploaded Image">
+        <img src="{{uploaded_file}}" alt="Uploaded Image" width=500 height=500>
+        <br>
+        {{label}}
     </div>
     {% endif %}
 </body>
