@@ -37,27 +37,35 @@ class GradCAM:
         target_module.register_forward_hook(forward_hook)
         target_module.register_backward_hook(backward_hook)
 
-    def generate_heatmap(self, class_idx):
+    def generate_heatmap(self, class_idx, gamma=0.8):
+        weights = torch.mean(self.gradients, dim=(2, 3), keepdim=True)
         weights = torch.mean(self.gradients, dim=(2, 3), keepdim=True)
         heatmap = torch.sum(weights * self.activations, dim=1).squeeze().cpu().detach().numpy()
+        heatmap = torch.sum(weights * self.activations, dim=1).squeeze().cpu().detach().numpy()
         heatmap = np.maximum(heatmap, 0)
+        heatmap = np.maximum(heatmap, 0)  # ReLU to remove negatives
         heatmap /= np.max(heatmap)  # Normalize
+        heatmap /= np.max(heatmap)  # Normalize to [0, 1]
+        # Apply power transform for better distribution
+        heatmap = heatmap**gamma
+        return heatmap
         return heatmap
 
-    def visualize(self, image_tensor, class_idx, original_image, save_path=None, colormap=cv2.COLORMAP_JET):
+    def visualize(self, image_tensor, class_idx, original_image, save_path=None, colormap=cv2.COLORMAP_JET, gamma=0.8):
         self.model.zero_grad()
         output = self.model(image_tensor)
         class_score = output[0, class_idx]
         class_score.backward()
 
-        heatmap = self.generate_heatmap(class_idx)
-        heatmap = cv2.resize(heatmap, (original_image.width, original_image.height))
-        heatmap = cv2.applyColorMap(np.uint8(255 * heatmap), colormap)
+        heatmap = self.generate_heatmap(class_idx, gamma=gamma)
+        heatmap_resized = cv2.resize(heatmap, (original_image.width, original_image.height))
+        heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap_resized), colormap)
+
 
         image_np = np.array(original_image)
         image_np = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
 
-        overlay = cv2.addWeighted(image_np, 0.5, heatmap, 0.5, 0)
+        overlay = cv2.addWeighted(image_np, 0.5, heatmap_colored, 0.5, 0)
         output_overlay = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
         cv2.imwrite(save_path, output_overlay)
 
@@ -96,7 +104,7 @@ def test_model(image_path, save_path):
     # Visualize the Grad-CAM heatmap
     prediction = class_labels[predicted_class]
     if prediction == "Pneumonia":
-        grad_cam.visualize(input_tensor, predicted_class, original_image, save_path)
+        grad_cam.visualize(input_tensor, predicted_class, original_image, save_path, gamma=0.7)
         
     #return pred_labels[0]
     return prediction
