@@ -26,6 +26,7 @@ The dataset is organized into two folders:
 
 ### 1. User Interface  
 - **`ui.py`**:  
+![Web Showcase]("Final Version\UI\static\web.png")
   Run this script to launch the user interface in a web browser.  
 
 ### 2. Prediction and Visualization  
