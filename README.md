@@ -12,7 +12,8 @@ The dataset is organized into two folders:
 
 ### 1. Pre-trained Model  
 - **`vgg16-397923af.pth`**:  
-  This is the pre-trained VGG16 model we are improving, tailored specifically for pediatric cases.  
+  This is the pre-trained VGG16 model we are improving, modified specifically for pediatric cases. Since it somehow can't be put inside the repository. We provide a Google Drive link directing to the model instead: 
+  https://drive.google.com/file/d/16bvVWVtCP3OwHGf4EL4OPbpxWFX1yDVF/view?usp=sharing 
 
 ### 2. Training Script  
 - **`Final_Version.ipynb`**:  
